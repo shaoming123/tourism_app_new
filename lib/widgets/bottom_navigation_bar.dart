@@ -31,46 +31,40 @@ class _BottomNavigationBarTravelState extends State<BottomNavigationBarTravel> {
   ];
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: _children[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: _selectedIndex == 0
-                    ? new SvgPicture.asset('Assets/svg/icon_home_colored.svg')
-                    : new SvgPicture.asset('Assets/svg/icon_home.svg'),
-                label: 'Home'),
-            BottomNavigationBarItem(
-              icon: _selectedIndex == 1
-                  ? new SvgPicture.asset('Assets/svg/icon_heart_colored.svg')
-                  : new SvgPicture.asset('Assets/svg/icon_heart.svg'),
-              label: 'Heart',
-            ),
-            BottomNavigationBarItem(
-              icon: _selectedIndex == 2
-                  ? new SvgPicture.asset(
-                      'Assets/svg/icon_notification_colored.svg')
-                  : new SvgPicture.asset('Assets/svg/icon_notification.svg'),
-              label: 'Notification',
-            ),
-            BottomNavigationBarItem(
-              icon: _selectedIndex == 3
-                  ? new SvgPicture.asset('Assets/svg/icon_user_colored.svg')
-                  : new SvgPicture.asset('Assets/svg/icon_user.svg'),
-              label: 'User',
-            )
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          backgroundColor: Colors.transparent,
-          type: BottomNavigationBarType.fixed,
-          selectedFontSize: 12,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          elevation: 0,
+    return BottomNavigationBar(
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+            icon: _selectedIndex == 0
+                ? SvgPicture.asset('Assets/svg/icon_home_colored.svg')
+                : SvgPicture.asset('Assets/svg/icon_home.svg'),
+            label: 'Home'),
+        BottomNavigationBarItem(
+          icon: _selectedIndex == 1
+              ? SvgPicture.asset('Assets/svg/icon_heart_colored.svg')
+              : SvgPicture.asset('Assets/svg/icon_heart.svg'),
+          label: 'Heart',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: _selectedIndex == 2
+              ? SvgPicture.asset('Assets/svg/icon_notification_colored.svg')
+              : SvgPicture.asset('Assets/svg/icon_notification.svg'),
+          label: 'Notification',
+        ),
+        BottomNavigationBarItem(
+          icon: _selectedIndex == 3
+              ? SvgPicture.asset('Assets/svg/icon_user_colored.svg')
+              : SvgPicture.asset('Assets/svg/icon_user.svg'),
+          label: 'User',
+        )
+      ],
+      currentIndex: _selectedIndex,
+      onTap: _onItemTapped,
+      backgroundColor: Colors.transparent,
+      type: BottomNavigationBarType.fixed,
+      selectedFontSize: 12,
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+      elevation: 0,
     );
   }
 }

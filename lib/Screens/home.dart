@@ -70,18 +70,18 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(9.6),
                       color: Color(0x080a0928),
                     ),
-                    child: SvgPicture.asset('assets/svg/icon_drawer.svg'),
+                    child: SvgPicture.asset('Assets/svg/icon_drawer.svg'),
                   ),
-                  // Container(
-                  //   height: 57.6,
-                  //   width: 57.6,
-                  //   padding: EdgeInsets.all(18),
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(9.6),
-                  //     color: Color(0x080a0928),
-                  //   ),
-                  //   child: SvgPicture.asset('assets/svg/icon_search.svg'),
-                  // )
+                  Container(
+                    height: 57.6,
+                    width: 57.6,
+                    padding: EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(9.6),
+                      color: Color(0x080a0928),
+                    ),
+                    child: SvgPicture.asset('Assets/svg/icon_search.svg'),
+                  ),
                   IconButton(
                       icon: const Icon(Icons.logout),
                       color: Theme.of(context).iconTheme.color,
@@ -103,31 +103,30 @@ class _HomeState extends State<Home> {
             ),
 
             /// Custom Tab bar with Custom Indicator
-            // Container(
-            //   height: 30,
-            //   margin: EdgeInsets.only(left: 14.4, top: 28.8),
-            //   child: DefaultTabController(
-            //     length: 4,
-            //     child: TabBar(
-            //         labelPadding: EdgeInsets.only(left: 14.4, right: 14.4),
-            //         indicatorPadding:
-            //             EdgeInsets.only(left: 14.4, right: 14.4),
-            //         isScrollable: true,
-            //         labelColor: Color(0xFF000000),
-            //         unselectedLabelColor: Color(0xFF8a8a8a),
-            //         labelStyle: GoogleFonts.lato(
-            //             fontSize: 14, fontWeight: FontWeight.w700),
-            //         unselectedLabelStyle: GoogleFonts.lato(
-            //             fontSize: 14, fontWeight: FontWeight.w700),
-            //         tabs: [
-            //           Tab(
-            //             child: Container(
-            //               child: Text('Recommended'),
-            //             ),
-            //           ),
-            //         ]),
-            //   ),
-            // ),
+            Container(
+              height: 30,
+              margin: EdgeInsets.only(left: 14.4, top: 28.8),
+              child: DefaultTabController(
+                length: 1,
+                child: TabBar(
+                    labelPadding: EdgeInsets.only(left: 14.4, right: 14.4),
+                    indicatorPadding: EdgeInsets.only(left: 14.4, right: 14.4),
+                    isScrollable: true,
+                    labelColor: Color(0xFF000000),
+                    unselectedLabelColor: Color(0xFF8a8a8a),
+                    labelStyle: GoogleFonts.lato(
+                        fontSize: 14, fontWeight: FontWeight.w700),
+                    unselectedLabelStyle: GoogleFonts.lato(
+                        fontSize: 14, fontWeight: FontWeight.w700),
+                    tabs: [
+                      Tab(
+                        child: Container(
+                          child: Text('Recommended'),
+                        ),
+                      ),
+                    ]),
+              ),
+            ),
 
             /// ListView widget with PageView
             /// Recommendations Section
@@ -176,7 +175,7 @@ class _HomeState extends State<Home> {
                                   child: Row(
                                     children: <Widget>[
                                       SvgPicture.asset(
-                                          'assets/svg/icon_location.svg'),
+                                          'Assets/svg/icon_location.svg'),
                                       SizedBox(
                                         width: 9.52,
                                       ),
