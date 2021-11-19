@@ -39,7 +39,7 @@ class _DetailPageState extends State<DetailPage> {
                   color: Colors.white),
               child: Center(
                 child: Icon(
-                  Icons.bookmark_border,
+                  Icons.favorite_border,
                   color: Colors.pink.shade400,
                 ),
               ),
