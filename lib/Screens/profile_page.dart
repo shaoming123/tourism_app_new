@@ -1,6 +1,8 @@
 //@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:tourismapp/store/theme_management.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +20,7 @@ class _ProfileState extends State<Profile> {
   String _username = "";
   String _phone = "";
   String _email = "";
+  bool _isChangeMode = true;
 
   User _user;
   @override
@@ -38,20 +41,21 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       bottomNavigationBar: const BottomNavigationBarTravel(),
       body: Container(
-          color: Colors.black,
+          color: Theme.of(context).backgroundColor,
           child: ListView(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
                     height: 150.0,
-                    color: Colors.black,
+                    color: Theme.of(context).backgroundColor,
                     child: Column(
                       children: <Widget>[
                         Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, top: 20.0),
+                            padding: const EdgeInsets.only(
+                                left: 20.0, top: 20.0, right: 20.0),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Padding(
@@ -59,11 +63,35 @@ class _ProfileState extends State<Profile> {
                                   child: Text(
                                     'My Profile',
                                     style: GoogleFonts.roboto(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25.0,
-                                        color: Colors.white),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25.0,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .color,
+                                    ),
                                   ),
-                                )
+                                ),
+                                Consumer<ThemeNotifier>(
+                                    builder: (context, theme, child) {
+                                  return Container(
+                                      height: 50.0,
+                                      width: 50.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      child: IconButton(
+                                          icon: const Icon(Icons.light_mode),
+                                          color: Colors.white,
+                                          onPressed: () {
+                                            _isChangeMode
+                                                ? theme.setDarkMode()
+                                                : theme.setLightMode();
+                                            _isChangeMode = !_isChangeMode;
+                                          }));
+                                }),
                               ],
                             )),
                         Padding(
@@ -85,15 +113,15 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   Container(
-                    color: Colors.black,
+                    color: Theme.of(context).backgroundColor,
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 25.0),
+                      padding: const EdgeInsets.only(bottom: 25.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
                                 mainAxisAlignment:
@@ -105,26 +133,24 @@ class _ProfileState extends State<Profile> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Text(
-                                        'Parsonal Information',
+                                        'Personal Information',
                                         style: GoogleFonts.roboto(
                                             fontSize: 20.0,
-                                            color: Colors.white,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                .color,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[],
-                                  )
                                 ],
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -137,18 +163,21 @@ class _ProfileState extends State<Profile> {
                                         'Username',
                                         style: GoogleFonts.roboto(
                                             fontSize: 18.0,
-                                            color: Colors.white,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                .color,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ],
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -158,7 +187,10 @@ class _ProfileState extends State<Profile> {
                                       _username,
                                       style: GoogleFonts.roboto(
                                         fontSize: 18.0,
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color,
                                       ),
                                     ),
                                   ),
@@ -181,7 +213,10 @@ class _ProfileState extends State<Profile> {
                                         'Email',
                                         style: GoogleFonts.roboto(
                                             fontSize: 18.0,
-                                            color: Colors.white,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                .color,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -202,7 +237,10 @@ class _ProfileState extends State<Profile> {
                                       _email,
                                       style: GoogleFonts.roboto(
                                         fontSize: 18.0,
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color,
                                       ),
                                     ),
                                   ),
@@ -225,7 +263,10 @@ class _ProfileState extends State<Profile> {
                                         'Mobile',
                                         style: GoogleFonts.roboto(
                                             fontSize: 18.0,
-                                            color: Colors.white,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                .color,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -246,7 +287,10 @@ class _ProfileState extends State<Profile> {
                                       _phone,
                                       style: GoogleFonts.roboto(
                                         fontSize: 18.0,
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color,
                                       ),
                                     ),
                                   ),
