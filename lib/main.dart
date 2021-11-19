@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tourismapp/Screens/profile_page.dart';
+import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 
+import 'Screens/favorite.dart';
 import 'Screens/home.dart';
 import 'Screens/sign_in.dart';
 
@@ -41,7 +43,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: user != null ? const Home() : const SignIn(),
+      // theme: ThemeData(scaffoldBackgroundColor: Colors.black),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/home': (context) => const Home(),
+        '/favorite': (context) => const Favorite(),
+        '/profile': (context) => const Profile(),
+      },
     );
   }
 }

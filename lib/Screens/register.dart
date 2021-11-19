@@ -1,14 +1,11 @@
-// ignore_for_file: deprecated_member_use
-
+//@dart=2.9
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourismapp/Screens/sign_in.dart';
 
-final _scaffoldKey = GlobalKey<ScaffoldState>();
-
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+  const Register({Key key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -18,12 +15,13 @@ final auth = FirebaseAuth.instance;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class _RegisterState extends State<Register> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  late TextEditingController email;
-  late TextEditingController password;
-  late TextEditingController username;
-  late TextEditingController phone;
+  TextEditingController email;
+  TextEditingController password;
+  TextEditingController username;
+  TextEditingController phone;
 
   @override
   void initState() {
@@ -49,16 +47,16 @@ class _RegisterState extends State<Register> {
       key: _scaffoldKey,
       body: Stack(
         children: <Widget>[
-          Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('Assets/image1.png'),
-                    fit: BoxFit.fitWidth,
-                    alignment: Alignment.topCenter)),
-          ),
+          // Container(
+          //   decoration: const BoxDecoration(
+          //       image: DecorationImage(
+          //           image: AssetImage('Assets/image1.png'),
+          //           fit: BoxFit.fitWidth,
+          //           alignment: Alignment.topCenter)),
+          // ),
           Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top: 270),
+            // margin: EdgeInsets.only(top: 270),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.white,
@@ -89,7 +87,7 @@ class _RegisterState extends State<Register> {
                                 prefixIcon: Icon(Icons.person_outline),
                                 labelStyle: TextStyle(fontSize: 15)),
                             controller: email,
-                            validator: (val) => val!.isNotEmpty
+                            validator: (val) => val.isNotEmpty
                                 ? null
                                 : "Please enter a email address",
                           ),
@@ -106,9 +104,8 @@ class _RegisterState extends State<Register> {
                               prefixIcon: Icon(Icons.lock_outline),
                               labelStyle: TextStyle(fontSize: 15)),
                           controller: username,
-                          validator: (val) => val!.isNotEmpty
-                              ? null
-                              : "Please enter a username",
+                          validator: (val) =>
+                              val.isNotEmpty ? null : "Please enter a username",
                         ),
                       ),
                       Padding(
@@ -124,7 +121,7 @@ class _RegisterState extends State<Register> {
                                 prefixIcon: Icon(Icons.lock_outline),
                                 labelStyle: TextStyle(fontSize: 15)),
                             controller: phone,
-                            validator: (val) => val!.isNotEmpty
+                            validator: (val) => val.isNotEmpty
                                 ? null
                                 : "Please enter your phone number",
                           ),
@@ -143,7 +140,7 @@ class _RegisterState extends State<Register> {
                               labelStyle: TextStyle(fontSize: 15)),
                           controller: password,
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value.isEmpty) {
                               return 'Please enter some text';
                             }
                             if (value.length < 8) {
@@ -158,7 +155,7 @@ class _RegisterState extends State<Register> {
                         padding: EdgeInsets.only(top: 20),
                         child: MaterialButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
+                            if (_formKey.currentState.validate()) {
                               addUser();
                             }
                           }, //since this is only a UI app
@@ -233,7 +230,7 @@ class _RegisterState extends State<Register> {
 
   Future<void> addUser() async {
     try {
-      final User? user = (await auth.createUserWithEmailAndPassword(
+      final User user = (await auth.createUserWithEmailAndPassword(
               email: email.text, password: password.text))
           .user;
       if (user != null) {
@@ -248,14 +245,14 @@ class _RegisterState extends State<Register> {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const SignIn()));
       } else {
-        _scaffoldKey.currentState!.showSnackBar(
+        _scaffoldKey.currentState.showSnackBar(
           const SnackBar(
             content: Text("Account has been created already"),
           ),
         );
       }
     } catch (e) {
-      _scaffoldKey.currentState!.showSnackBar(
+      _scaffoldKey.currentState.showSnackBar(
         const SnackBar(
           content:
               Text("The email address is already in use by another account"),

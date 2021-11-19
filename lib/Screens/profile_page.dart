@@ -1,3 +1,4 @@
+//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
@@ -5,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile({Key key}) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -14,19 +15,19 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late String _username = "";
-  late String _phone = "";
-  late String _email = "";
+  String _username = "";
+  String _phone = "";
+  String _email = "";
 
-  late User _user;
+  User _user;
   @override
   void initState() {
-    _user = _auth.currentUser!;
+    _user = _auth.currentUser;
     firestore.collection("users").doc(_user.uid).get().then((value) {
       setState(() {
-        _username = value.data()!['username'];
-        _phone = value.data()!['phone'];
-        _email = value.data()!['email'];
+        _username = value.data()['username'];
+        _phone = value.data()['phone'];
+        _email = value.data()['email'];
       });
     });
     super.initState();
@@ -35,16 +36,16 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: const BottomNavigationBarTravel(),
-        body: Container(
-          color: Colors.white,
+      bottomNavigationBar: const BottomNavigationBarTravel(),
+      body: Container(
+          color: Colors.black,
           child: ListView(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
                     height: 150.0,
-                    color: Colors.white,
+                    color: Colors.black,
                     child: Column(
                       children: <Widget>[
                         Padding(
@@ -60,7 +61,7 @@ class _ProfileState extends State<Profile> {
                                     style: GoogleFonts.roboto(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25.0,
-                                        color: Colors.black),
+                                        color: Colors.white),
                                   ),
                                 )
                               ],
@@ -84,7 +85,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   Container(
-                    color: Color(0xffFFFFFF),
+                    color: Colors.black,
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 25.0),
                       child: Column(
@@ -107,6 +108,7 @@ class _ProfileState extends State<Profile> {
                                         'Parsonal Information',
                                         style: GoogleFonts.roboto(
                                             fontSize: 20.0,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -135,6 +137,7 @@ class _ProfileState extends State<Profile> {
                                         'Username',
                                         style: GoogleFonts.roboto(
                                             fontSize: 18.0,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -155,6 +158,7 @@ class _ProfileState extends State<Profile> {
                                       _username,
                                       style: GoogleFonts.roboto(
                                         fontSize: 18.0,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -177,6 +181,7 @@ class _ProfileState extends State<Profile> {
                                         'Email',
                                         style: GoogleFonts.roboto(
                                             fontSize: 18.0,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -197,6 +202,7 @@ class _ProfileState extends State<Profile> {
                                       _email,
                                       style: GoogleFonts.roboto(
                                         fontSize: 18.0,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -219,6 +225,7 @@ class _ProfileState extends State<Profile> {
                                         'Mobile',
                                         style: GoogleFonts.roboto(
                                             fontSize: 18.0,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -239,6 +246,7 @@ class _ProfileState extends State<Profile> {
                                       _phone,
                                       style: GoogleFonts.roboto(
                                         fontSize: 18.0,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -252,7 +260,7 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             ],
-          ),
-        ));
+          )),
+    );
   }
 }

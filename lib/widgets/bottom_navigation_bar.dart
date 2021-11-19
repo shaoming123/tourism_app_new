@@ -1,70 +1,119 @@
+//@dart=2.9
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:tourismapp/Screens/profile_page.dart';
+import 'package:tourismapp/Screens/favorite.dart';
 import 'package:tourismapp/Screens/home.dart';
+import 'package:tourismapp/Screens/profile_page.dart';
+import 'package:tourismapp/Screens/sign_in.dart';
+
+int selectedItem = 0;
 
 class BottomNavigationBarTravel extends StatefulWidget {
-  const BottomNavigationBarTravel({Key? key}) : super(key: key);
-
+  const BottomNavigationBarTravel({Key key}) : super(key: key);
   @override
   _BottomNavigationBarTravelState createState() =>
       _BottomNavigationBarTravelState();
 }
 
 class _BottomNavigationBarTravelState extends State<BottomNavigationBarTravel> {
-  int _selectedIndex = 0;
+  User _user;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // List children = [
+  //   Home(),
+  //   Favorite(),
+  //   Home(),
+  //   Profile(),
+  // ];
+  @override
+  void initState() {
+    _user = _auth.currentUser;
+    super.initState();
+  }
 
   void _onItemTapped(int currentIndex) {
     setState(() {
-      _selectedIndex = currentIndex;
+      selectedItem = currentIndex;
+      switch (selectedItem) {
+        case 0:
+          Navigator.pushNamed(context, '/home');
+          break;
+        case 1:
+          Navigator.pushNamed(context, '/favorite');
+          break;
+        default:
+          Navigator.pushNamed(context, '/profile');
+      }
     });
   }
 
-  var bottomNavStyle =
-      GoogleFonts.lato(fontSize: 12, fontWeight: FontWeight.w500);
-  final List _children = [
-    Home(),
-    Home(),
-    Home(),
-    Profile(),
-  ];
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      showSelectedLabels: false,
+      currentIndex: selectedItem,
+      elevation: 0,
+      onTap: _onItemTapped,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-            icon: _selectedIndex == 0
-                ? SvgPicture.asset('Assets/svg/icon_home_colored.svg')
-                : SvgPicture.asset('Assets/svg/icon_home.svg'),
+            backgroundColor: Color(0xFF1B1B1B),
+            icon: selectedItem == 0
+                ? const Icon(
+                    Icons.home,
+                    color: Colors.pinkAccent,
+                    size: 35,
+                  )
+                : const Icon(
+                    Icons.home,
+                    color: Color(0xFF808080),
+                    size: 25,
+                  ),
             label: 'Home'),
         BottomNavigationBarItem(
-          icon: _selectedIndex == 1
-              ? SvgPicture.asset('Assets/svg/icon_heart_colored.svg')
-              : SvgPicture.asset('Assets/svg/icon_heart.svg'),
-          label: 'Heart',
-        ),
+            backgroundColor: Color(0xFF1B1B1B),
+            icon: selectedItem == 1
+                ? const Icon(
+                    Icons.favorite,
+                    color: Colors.pinkAccent,
+                    size: 35,
+                  )
+                : const Icon(
+                    Icons.favorite,
+                    color: Color(0xFF808080),
+                    size: 28,
+                  ),
+            label: 'Home'),
         BottomNavigationBarItem(
-          icon: _selectedIndex == 2
-              ? SvgPicture.asset('Assets/svg/icon_notification_colored.svg')
-              : SvgPicture.asset('Assets/svg/icon_notification.svg'),
-          label: 'Notification',
-        ),
+            backgroundColor: Color(0xFF1B1B1B),
+            icon: selectedItem == 2
+                ? const Icon(
+                    Icons.history,
+                    color: Colors.pinkAccent,
+                    size: 35,
+                  )
+                : const Icon(
+                    Icons.history,
+                    color: Color(0xFF808080),
+                    size: 28,
+                  ),
+            label: 'Home'),
         BottomNavigationBarItem(
-          icon: _selectedIndex == 3
-              ? SvgPicture.asset('Assets/svg/icon_user_colored.svg')
-              : SvgPicture.asset('Assets/svg/icon_user.svg'),
-          label: 'User',
-        )
+            backgroundColor: Color(0xFF1B1B1B),
+            icon: selectedItem == 3
+                ? const Icon(
+                    Icons.person,
+                    color: Colors.pinkAccent,
+                    size: 35,
+                  )
+                : const Icon(
+                    Icons.person,
+                    color: Color(0xFF808080),
+                    size: 29,
+                  ),
+            label: 'Home'),
       ],
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-      backgroundColor: Colors.transparent,
-      type: BottomNavigationBarType.fixed,
-      selectedFontSize: 12,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      elevation: 0,
+      backgroundColor: const Color(0xFF1B1B1B),
     );
   }
 }

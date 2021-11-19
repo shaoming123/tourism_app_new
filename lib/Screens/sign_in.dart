@@ -1,21 +1,21 @@
+//@dart=2.9
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourismapp/Screens/home.dart';
 import 'package:tourismapp/Screens/register.dart';
 
-final _scaffoldKey = GlobalKey<ScaffoldState>();
-
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({Key key}) : super(key: key);
 
   @override
   State<SignIn> createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late TextEditingController email;
-  late TextEditingController password;
+  TextEditingController email;
+  TextEditingController password;
   final auth = FirebaseAuth.instance;
 
   @override
@@ -40,16 +40,16 @@ class _SignInState extends State<SignIn> {
       key: _scaffoldKey,
       body: Stack(
         children: <Widget>[
-          Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('Assets/image1.png'),
-                    fit: BoxFit.fitWidth,
-                    alignment: Alignment.topCenter)),
-          ),
+          // Container(
+          //   decoration: const BoxDecoration(
+          //       image: DecorationImage(
+          //           image: AssetImage('Assets/image1.png'),
+          //           fit: BoxFit.fitWidth,
+          //           alignment: Alignment.topCenter)),
+          // ),
           Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top: 270),
+            // margin: EdgeInsets.only(top: 270),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.white,
@@ -81,7 +81,7 @@ class _SignInState extends State<SignIn> {
                                 labelStyle: TextStyle(fontSize: 15)),
                             controller: email,
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value.isEmpty) {
                                 return 'Please enter some text';
                               } else {
                                 return null;
@@ -104,7 +104,7 @@ class _SignInState extends State<SignIn> {
                             labelStyle: TextStyle(fontSize: 15)),
                         controller: password,
                         validator: (value) {
-                          if (value!.isEmpty) {
+                          if (value.isEmpty) {
                             return 'Please enter some text';
                           } else {
                             return null;
@@ -116,7 +116,7 @@ class _SignInState extends State<SignIn> {
                       padding: EdgeInsets.only(top: 20),
                       child: MaterialButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
+                          if (_formKey.currentState.validate()) {
                             _signInWithEmailAndPassword();
                           }
                         }, //since this is only a UI app
@@ -190,7 +190,7 @@ class _SignInState extends State<SignIn> {
 
   Future<void> _signInWithEmailAndPassword() async {
     try {
-      final User? user = (await auth.signInWithEmailAndPassword(
+      final User user = (await auth.signInWithEmailAndPassword(
               email: email.text, password: password.text))
           .user;
 
@@ -198,14 +198,14 @@ class _SignInState extends State<SignIn> {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const Home()));
       } else {
-        _scaffoldKey.currentState!.showSnackBar(
+        _scaffoldKey.currentState.showSnackBar(
           const SnackBar(
             content: Text("Incorrect email and password"),
           ),
         );
       }
     } catch (e) {
-      _scaffoldKey.currentState!.showSnackBar(
+      _scaffoldKey.currentState.showSnackBar(
         const SnackBar(
           content: Text('Failed to sign in with Email & Password'),
         ),
