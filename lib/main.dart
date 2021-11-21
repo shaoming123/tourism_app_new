@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:tourismapp/Screens/order_list.dart';
 import 'package:tourismapp/Screens/profile_page.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 
@@ -48,6 +49,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/home': (context) => const Home(),
         '/favorite': (context) => const Favorite(),
+        '/order': (context) => const OrderList(),
         '/profile': (context) => const Profile(),
       },
     );
