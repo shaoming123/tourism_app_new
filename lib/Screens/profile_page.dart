@@ -62,8 +62,8 @@ class _ProfileState extends State<Profile> {
                                   padding: EdgeInsets.only(left: 5.0),
                                   child: Text(
                                     'My Profile',
-                                    style: GoogleFonts.roboto(
-                                      fontWeight: FontWeight.bold,
+                                    style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w300,
                                       fontSize: 25.0,
                                       color: Theme.of(context)
                                           .textTheme
@@ -134,13 +134,13 @@ class _ProfileState extends State<Profile> {
                                     children: <Widget>[
                                       Text(
                                         'Personal Information',
-                                        style: GoogleFonts.roboto(
+                                        style: GoogleFonts.montserrat(
                                             fontSize: 20.0,
                                             color: Theme.of(context)
                                                 .textTheme
                                                 .bodyText2
                                                 .color,
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ],
                                   ),
@@ -161,13 +161,13 @@ class _ProfileState extends State<Profile> {
                                     children: <Widget>[
                                       Text(
                                         'Username',
-                                        style: GoogleFonts.roboto(
+                                        style: GoogleFonts.montserrat(
                                             fontSize: 18.0,
                                             color: Theme.of(context)
                                                 .textTheme
                                                 .bodyText2
                                                 .color,
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ],
                                   ),
@@ -185,8 +185,8 @@ class _ProfileState extends State<Profile> {
                                   Flexible(
                                     child: Text(
                                       _username,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 18.0,
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 15.0,
                                         color: Theme.of(context)
                                             .textTheme
                                             .bodyText2
@@ -211,13 +211,13 @@ class _ProfileState extends State<Profile> {
                                     children: <Widget>[
                                       Text(
                                         'Email',
-                                        style: GoogleFonts.roboto(
+                                        style: GoogleFonts.montserrat(
                                             fontSize: 18.0,
                                             color: Theme.of(context)
                                                 .textTheme
                                                 .bodyText2
                                                 .color,
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ],
                                   ),
@@ -235,7 +235,7 @@ class _ProfileState extends State<Profile> {
                                   Flexible(
                                     child: Text(
                                       _email,
-                                      style: GoogleFonts.roboto(
+                                      style: GoogleFonts.montserrat(
                                         fontSize: 18.0,
                                         color: Theme.of(context)
                                             .textTheme
@@ -260,24 +260,24 @@ class _ProfileState extends State<Profile> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Text(
-                                        'Mobile',
-                                        style: GoogleFonts.roboto(
+                                        'Mobile Phone',
+                                        style: GoogleFonts.montserrat(
                                             fontSize: 18.0,
                                             color: Theme.of(context)
                                                 .textTheme
                                                 .bodyText2
                                                 .color,
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ],
                                   ),
                                 ],
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -285,8 +285,8 @@ class _ProfileState extends State<Profile> {
                                   Flexible(
                                     child: Text(
                                       _phone,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 18.0,
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 15.0,
                                         color: Theme.of(context)
                                             .textTheme
                                             .bodyText2
