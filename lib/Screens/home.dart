@@ -119,8 +119,9 @@ class _HomeState extends State<Home> {
                           style: GoogleFonts.montserrat(
                               fontSize: 15.0,
                               fontWeight: FontWeight.bold,
-                              textStyle:
-                                  TextStyle(color: Colors.pink.shade600)),
+                              textStyle: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              )),
                         ),
                       ),
                     ),
@@ -137,7 +138,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       bottomNavigationBar: const BottomNavigationBarTravel(),
       body: SingleChildScrollView(
         child: Column(
@@ -153,8 +154,9 @@ class _HomeState extends State<Home> {
                     height: 50.0,
                     width: 50.0,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.pink.shade600),
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Theme.of(context).primaryColor,
+                    ),
                     child: Icon(
                       Icons.filter_list,
                       color: Colors.white,
@@ -166,7 +168,9 @@ class _HomeState extends State<Home> {
                       style: GoogleFonts.montserrat(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w300,
-                        textStyle: TextStyle(color: Colors.white),
+                        textStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
                   ),
@@ -174,8 +178,9 @@ class _HomeState extends State<Home> {
                       height: 50.0,
                       width: 50.0,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Color(0xFF353535)),
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Theme.of(context).primaryColor,
+                      ),
                       child: IconButton(
                           icon: const Icon(Icons.logout),
                           color: Colors.white,

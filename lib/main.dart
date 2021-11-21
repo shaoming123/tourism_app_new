@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tourismapp/Screens/order_list.dart';
 import 'package:tourismapp/Screens/profile_page.dart';
+import 'package:tourismapp/store/theme_management.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 
 import 'Screens/favorite.dart';
@@ -42,16 +44,21 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: user != null ? const Home() : const SignIn(),
-      // theme: ThemeData(scaffoldBackgroundColor: Colors.black),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/home': (context) => const Home(),
-        '/favorite': (context) => const Favorite(),
-        '/order': (context) => const OrderList(),
-        '/profile': (context) => const Profile(),
-      },
+    return ChangeNotifierProvider<ThemeNotifier>(
+      create: (_) => ThemeNotifier(),
+      child: Consumer<ThemeNotifier>(builder: (context, theme, child) {
+        return MaterialApp(
+          home: user != null ? const Home() : const SignIn(),
+          debugShowCheckedModeBanner: false,
+          theme: theme.getTheme(),
+          routes: {
+            '/home': (context) => const Home(),
+            '/favorite': (context) => const Favorite(),
+            '/order': (context) => const OrderList(),
+            '/profile': (context) => const Profile(),
+          },
+        );
+      }),
     );
   }
 }

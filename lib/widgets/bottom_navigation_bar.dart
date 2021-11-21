@@ -60,63 +60,63 @@ class _BottomNavigationBarTravelState extends State<BottomNavigationBarTravel> {
       onTap: _onItemTapped,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-            backgroundColor: Color(0xFF1B1B1B),
+            backgroundColor: Theme.of(context).backgroundColor,
             icon: selectedItem == 0
-                ? const Icon(
+                ? Icon(
                     Icons.home,
-                    color: Colors.pinkAccent,
+                    color: Theme.of(context).primaryColor,
                     size: 35,
                   )
-                : const Icon(
+                : Icon(
                     Icons.home,
-                    color: Color(0xFF808080),
+                    color: Theme.of(context).primaryColor,
                     size: 25,
                   ),
             label: 'Home'),
         BottomNavigationBarItem(
-            backgroundColor: Color(0xFF1B1B1B),
+            backgroundColor: Theme.of(context).backgroundColor,
             icon: selectedItem == 1
-                ? const Icon(
+                ? Icon(
                     Icons.favorite,
-                    color: Colors.pinkAccent,
+                    color: Theme.of(context).primaryColor,
                     size: 35,
                   )
-                : const Icon(
+                : Icon(
                     Icons.favorite,
-                    color: Color(0xFF808080),
+                    color: Theme.of(context).primaryColor,
                     size: 28,
                   ),
             label: 'Home'),
         BottomNavigationBarItem(
-            backgroundColor: Color(0xFF1B1B1B),
+            backgroundColor: Theme.of(context).backgroundColor,
             icon: selectedItem == 2
-                ? const Icon(
+                ? Icon(
                     Icons.history,
-                    color: Colors.pinkAccent,
+                    color: Theme.of(context).primaryColor,
                     size: 35,
                   )
-                : const Icon(
+                : Icon(
                     Icons.history,
-                    color: Color(0xFF808080),
+                    color: Theme.of(context).primaryColor,
                     size: 28,
                   ),
             label: 'Home'),
         BottomNavigationBarItem(
-            backgroundColor: Color(0xFF1B1B1B),
+            backgroundColor: Theme.of(context).backgroundColor,
             icon: selectedItem == 3
-                ? const Icon(
+                ? Icon(
                     Icons.person,
-                    color: Colors.pinkAccent,
+                    color: Theme.of(context).primaryColor,
                     size: 35,
                   )
-                : const Icon(
+                : Icon(
                     Icons.person,
-                    color: Color(0xFF808080),
+                    color: Theme.of(context).primaryColor,
                     size: 29,
                   ),
             label: 'Home'),
       ],
-      backgroundColor: const Color(0xFF1B1B1B),
+      backgroundColor: Theme.of(context).backgroundColor,
     );
   }
 }
