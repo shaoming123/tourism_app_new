@@ -7,10 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tourismapp/Screens/checkout.dart';
 import 'package:tourismapp/models/beach_model.dart';
 import 'package:tourismapp/models/popular_model.dart';
+import 'package:tourismapp/models/tourism_model.dart';
 
 class SelectedDetails extends StatefulWidget {
-  final img, place;
-  const SelectedDetails({Key key, this.img, this.place}) : super(key: key);
+  final countryIndex, index;
+  const SelectedDetails({Key key, this.index, this.countryIndex})
+      : super(key: key);
 
   @override
   State<SelectedDetails> createState() => _SelectedDetailsState();
@@ -18,12 +20,9 @@ class SelectedDetails extends StatefulWidget {
 
 class _SelectedDetailsState extends State<SelectedDetails> {
   @override
-  void initState() {}
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: ButtonTheme(
         minWidth: MediaQuery.of(context).size.width - 60,
         height: 56,
@@ -32,20 +31,20 @@ class _SelectedDetailsState extends State<SelectedDetails> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    Checkout(img: widget.img, place: widget.place),
+                builder: (context) => Checkout(
+                    countryIndex: widget.countryIndex, index: widget.index),
               ),
             )
           },
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(10.0),
           ),
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
           child: Text(
             "BOOK NOW",
             overflow: TextOverflow.visible,
             style: GoogleFonts.montserrat(
-              color: Color(0xff5A6C64),
+              color: Theme.of(context).textTheme.bodyText2.color,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
@@ -60,7 +59,8 @@ class _SelectedDetailsState extends State<SelectedDetails> {
               Stack(
                 children: [
                   Image.asset(
-                    widget.img,
+                    tourism[int.parse(widget.countryIndex)]
+                        .stateImage[int.parse(widget.index)],
                     height: 350,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
@@ -97,8 +97,9 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                               ),
                               IconButton(
                                 onPressed: () {},
-                                icon: const Icon(Icons.favorite,
-                                    color: Colors.pinkAccent, size: 30),
+                                icon: Icon(Icons.favorite,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 30),
                               ),
                             ],
                           ),
@@ -113,10 +114,11 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.place,
+                                tourism[int.parse(widget.countryIndex)]
+                                    .stateName[int.parse(widget.index)],
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.bold,
                                     fontSize: 23),
                               ),
                               SizedBox(
@@ -133,10 +135,11 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                                     width: 8,
                                   ),
                                   Text(
-                                    "Japan",
+                                    tourism[int.parse(widget.countryIndex)]
+                                        .countryName,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.bold,
                                         fontSize: 17),
                                   ),
                                 ],
@@ -168,8 +171,8 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).backgroundColor,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(30),
                                   topRight: Radius.circular(30))),
@@ -186,12 +189,13 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
-                      "RM 200 - 400",
+                      tourism[int.parse(widget.countryIndex)]
+                          .priceRange[int.parse(widget.index)],
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w900,
-                          color: Color(0xff5A6C64)),
+                          color: Theme.of(context).textTheme.caption.color),
                     ),
                   ),
                   SizedBox(
@@ -201,17 +205,18 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FeaturesTile(
-                        icon: Icon(Icons.fastfood, color: Color(0xff5A6C64)),
+                        icon: Icon(Icons.fastfood,
+                            color: Theme.of(context).buttonColor),
                         label: "Breakfast",
                       ),
                       FeaturesTile(
                         icon: Icon(Icons.airport_shuttle,
-                            color: Color(0xff5A6C64)),
+                            color: Theme.of(context).buttonColor),
                         label: "Transport",
                       ),
                       FeaturesTile(
                         icon: Icon(Icons.airplane_ticket,
-                            color: Color(0xff5A6C64)),
+                            color: Theme.of(context).buttonColor),
                         label: "Ticket",
                       )
                     ],
@@ -261,7 +266,8 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                                         height: 6,
                                       ),
                                       Text(
-                                        "3 days 2 night",
+                                        tourism[int.parse(widget.countryIndex)]
+                                            .package[int.parse(widget.index)],
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontSize: 14,
@@ -349,7 +355,7 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                           fontSize: 20,
                           height: 1.5,
                           fontWeight: FontWeight.w900,
-                          color: Color(0xff5A6C64)),
+                          color: Theme.of(context).textTheme.caption.color),
                     ),
                   ),
                   Container(
@@ -378,7 +384,7 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                                                 BorderRadius.circular(10)),
                                         child: Icon(
                                           Icons.airplanemode_active,
-                                          size: 33,
+                                          size: 30,
                                         )),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -429,7 +435,9 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Japan",
+                                          tourism[int.parse(
+                                                  widget.countryIndex)]
+                                              .countryName,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 14,
@@ -470,7 +478,8 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                                             color: Color(0xff5A6C64)),
                                       ),
                                       Text(
-                                        "18.1.2022 - 21.1.2022",
+                                        tourism[int.parse(widget.countryIndex)]
+                                            .date[int.parse(widget.index)],
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontSize: 14,
@@ -493,13 +502,14 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut scelerisque arcu quis eros auctor, eu dapibus urna congue. Nunc nisi diam, semper maximus risus dignissim, semper maximus nibh. Sed finibus ipsum eu erat finibus efficitur. ",
-                      textAlign: TextAlign.start,
+                      tourism[int.parse(widget.countryIndex)]
+                          .description[int.parse(widget.index)],
+                      textAlign: TextAlign.justify,
                       style: TextStyle(
                           fontSize: 15,
                           height: 1.5,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff879D95)),
+                          color: Theme.of(context).textTheme.caption.color),
                     ),
                   ),
                   SizedBox(
@@ -514,7 +524,7 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                           fontSize: 20,
                           height: 1.5,
                           fontWeight: FontWeight.w900,
-                          color: Color(0xff5A6C64)),
+                          color: Theme.of(context).textTheme.caption.color),
                     ),
                   ),
                 ],
@@ -566,7 +576,12 @@ class FeaturesTile extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xff5A6C64).withOpacity(0.5)),
+                  border: Border.all(
+                      color: Theme.of(context)
+                          .textTheme
+                          .caption
+                          .color
+                          .withOpacity(0.5)),
                   borderRadius: BorderRadius.circular(40)),
               child: icon,
             ),
@@ -581,7 +596,7 @@ class FeaturesTile extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xff5A6C64)),
+                      color: Theme.of(context).textTheme.caption.color),
                 ))
           ],
         ),

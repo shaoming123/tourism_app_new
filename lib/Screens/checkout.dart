@@ -1,10 +1,12 @@
+//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tourismapp/models/tourism_model.dart';
 
 class Checkout extends StatefulWidget {
-  final img, place;
+  final countryIndex, index;
 
-  const Checkout({Key? key, this.img, this.place}) : super(key: key);
+  const Checkout({Key key, this.countryIndex, this.index}) : super(key: key);
 
   @override
   State<Checkout> createState() => _CheckoutState();
@@ -15,21 +17,21 @@ class _CheckoutState extends State<Checkout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: ButtonTheme(
-        minWidth: MediaQuery.of(context).size.width - 80,
+        minWidth: MediaQuery.of(context).size.width - 50,
         height: 56,
         child: RaisedButton(
           onPressed: () => {},
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(10.0),
           ),
-          color: Color(0xFF82B1FF),
+          color: Theme.of(context).primaryColor,
           child: Text(
-            "Total Cost:RM 2345 | Check Out",
+            "Pay: RM 2345.00",
             overflow: TextOverflow.visible,
             style: GoogleFonts.montserrat(
-              color: Colors.white,
+              color: Theme.of(context).textTheme.bodyText2.color,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
@@ -57,7 +59,7 @@ class _CheckoutState extends State<Checkout> {
                       margin: EdgeInsets.only(top: 40),
                       child: Icon(
                         Icons.arrow_back,
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyText2.color,
                         size: 30,
                       ),
                     ),
@@ -71,117 +73,130 @@ class _CheckoutState extends State<Checkout> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                "Package - 3 Days 2 Night",
+                "Package - " +
+                    tourism[int.parse(widget.countryIndex)]
+                        .package[int.parse(widget.index)],
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 20,
                     height: 1.5,
                     fontWeight: FontWeight.w900,
-                    color: Color(0xff5A6C64)),
+                    color: Theme.of(context).textTheme.caption.color),
               ),
             ),
             Container(
               height: 140,
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               decoration: BoxDecoration(
                   color: Color(0xffE9F4F9),
                   borderRadius: BorderRadius.circular(16)),
               child: Container(
                 padding: EdgeInsets.only(left: 10, top: 10),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                         children: [
                           SizedBox(
                             height: 30,
                           ),
                           Container(
                             child: Image.asset(
-                              widget.img,
+                              tourism[int.parse(widget.countryIndex)]
+                                  .stateImage[int.parse(widget.index)],
                               width: 120,
                               height: 120,
                             ),
                           ),
-                          // SizedBox(
-                          //   width: 5,
-                          // ),
                           Container(
                               height: 80,
-                              child: VerticalDivider(
-                                  color: Colors.black, width: 20)),
-                          Container(
-                            margin: EdgeInsets.only(right: 10),
-                            // padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              child: VerticalDivider(color: Colors.black)),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  widget.place,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xff5A6C64)),
+                                Container(
+                                  // padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        tourism[int.parse(widget.countryIndex)]
+                                            .stateName[int.parse(widget.index)],
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xff5A6C64)),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        tourism[int.parse(widget.countryIndex)]
+                                            .countryName,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff5A6C64)),
+                                      ),
+                                      SizedBox(
+                                        height: 13,
+                                      ),
+                                      Text(
+                                        "RM 200",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xff5A6C64)),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "Japan",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff5A6C64)),
-                                ),
-                                SizedBox(
-                                  height: 13,
-                                ),
-                                Text(
-                                  "RM 200",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xff5A6C64)),
-                                )
+                                Container(
+                                    alignment: Alignment.centerRight,
+                                    child: Row(
+                                      // crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        _itemCount != 1
+                                            ? IconButton(
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  size: 14,
+                                                ),
+                                                onPressed: () => setState(
+                                                    () => _itemCount--),
+                                              )
+                                            : IconButton(
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  size: 14,
+                                                ),
+                                                onPressed: () {}),
+                                        Text(
+                                          _itemCount.toString(),
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        IconButton(
+                                            icon: Icon(
+                                              Icons.add,
+                                              size: 14,
+                                            ),
+                                            onPressed: () =>
+                                                setState(() => _itemCount++))
+                                      ],
+                                    ))
                               ],
                             ),
                           ),
-                          Container(
-                              padding: EdgeInsets.all(0),
-                              margin: EdgeInsets.all(0),
-                              child: Row(
-                                children: [
-                                  _itemCount != 1
-                                      ? IconButton(
-                                          icon: Icon(
-                                            Icons.remove,
-                                            size: 18,
-                                          ),
-                                          onPressed: () =>
-                                              setState(() => _itemCount--),
-                                        )
-                                      : IconButton(
-                                          icon: Icon(
-                                            Icons.remove,
-                                            size: 18,
-                                          ),
-                                          onPressed: () {}),
-                                  Text(_itemCount.toString()),
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.add,
-                                        size: 18,
-                                      ),
-                                      onPressed: () =>
-                                          setState(() => _itemCount++))
-                                ],
-                              ))
                         ],
                       ),
                     ),
@@ -196,10 +211,11 @@ class _CheckoutState extends State<Checkout> {
                 "Flights Details",
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    fontSize: 20,
-                    height: 1.5,
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xff5A6C64)),
+                  fontSize: 20,
+                  height: 1.5,
+                  fontWeight: FontWeight.w900,
+                  color: Theme.of(context).textTheme.caption.color,
+                ),
               ),
             ),
             Container(
@@ -274,7 +290,8 @@ class _CheckoutState extends State<Checkout> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Japan",
+                                    tourism[int.parse(widget.countryIndex)]
+                                        .countryName,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 14,
@@ -315,7 +332,8 @@ class _CheckoutState extends State<Checkout> {
                                       color: Color(0xff5A6C64)),
                                 ),
                                 Text(
-                                  "18.1.2022 - 21.1.2022",
+                                  tourism[int.parse(widget.countryIndex)]
+                                      .date[int.parse(widget.index)],
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 14,
@@ -342,23 +360,35 @@ class _CheckoutState extends State<Checkout> {
                     fontSize: 20,
                     height: 1.5,
                     fontWeight: FontWeight.w900,
-                    color: Color(0xff5A6C64)),
+                    color: Theme.of(context).textTheme.caption.color),
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height - 150.0,
+              height: MediaQuery.of(context).size.height - 230.0,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 80),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: Center(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 10,
-                    itemBuilder: (BuildContext context, int index) => hotellist(
-                        'Assets/images/japan.jpg',
-                        'Four Seasons',
-                        'Double bed rooms',
-                        '4'),
+                  child: Column(
+                    children: [
+                      hotellist(
+                        tourism[int.parse(widget.countryIndex)].hotelImage[0],
+                        tourism[int.parse(widget.countryIndex)].hotelName[0],
+                        tourism[int.parse(widget.countryIndex)].hotelRoom[0],
+                        tourism[int.parse(widget.countryIndex)].hotelStar[0],
+                      ),
+                      hotellist(
+                        tourism[int.parse(widget.countryIndex)].hotelImage[1],
+                        tourism[int.parse(widget.countryIndex)].hotelName[1],
+                        tourism[int.parse(widget.countryIndex)].hotelRoom[1],
+                        tourism[int.parse(widget.countryIndex)].hotelStar[1],
+                      ),
+                      hotellist(
+                        tourism[int.parse(widget.countryIndex)].hotelImage[2],
+                        tourism[int.parse(widget.countryIndex)].hotelName[2],
+                        tourism[int.parse(widget.countryIndex)].hotelRoom[2],
+                        tourism[int.parse(widget.countryIndex)].hotelStar[2],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -371,12 +401,12 @@ class _CheckoutState extends State<Checkout> {
     final children = <Widget>[];
     for (var i = 0; i < int.parse(star); i++) {
       children.add(
-        Icon(Icons.star, size: 14),
+        Icon(Icons.star, size: 14, color: Color(0xff5A6C64)),
       );
     }
     return Container(
       height: 120,
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 9),
+      margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -386,21 +416,21 @@ class _CheckoutState extends State<Checkout> {
               bottomRight: Radius.circular(10)),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.lightBlue.withOpacity(0.1),
               spreadRadius: 5,
               blurRadius: 7,
               offset: Offset(0, 3), // changes position of shadow
             ),
           ]),
       child: Container(
-        padding: EdgeInsets.only(left: 10, top: 10),
+        padding: EdgeInsets.only(left: 5, top: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
                     height: 30,
@@ -409,81 +439,91 @@ class _CheckoutState extends State<Checkout> {
                     child: Image.asset(
                       img,
                       fit: BoxFit.fill,
-                      width: MediaQuery.of(context).size.width - 260,
-                      height: MediaQuery.of(context).size.height - 640,
+                      width: MediaQuery.of(context).size.width - 250,
+                      height: MediaQuery.of(context).size.height - 650,
                     ),
                   ),
                   // SizedBox(
                   //   width: 5,
                   // ),
                   Container(
-                      height: 80,
-                      child: VerticalDivider(color: Colors.black, width: 20)),
-                  Container(
-                    // padding: EdgeInsets.only(right: 10),
-                    // padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      height: 80, child: VerticalDivider(color: Colors.black)),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          place,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff5A6C64)),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          room,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xff5A6C64)),
-                        ),
-                        SizedBox(
-                          height: 13,
+                        Container(
+                          // padding: EdgeInsets.only(right: 5),
+                          // padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                place,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xff5A6C64)),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                room,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff5A6C64)),
+                              ),
+                              SizedBox(
+                                height: 13,
+                              ),
+                              Container(
+                                child: Row(children: children
+                                    //     // ignore: unused_local_variable
+                                    //     for(var i in star)
+                                    //  Icon(Icons.star_border, size: 14),
+
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
-                          child: Row(children: children
-                              //     // ignore: unused_local_variable
-                              //     for(var i in star)
-                              //  Icon(Icons.star_border, size: 14),
-
-                              ),
-                        ),
+                            child: Row(
+                          children: [
+                            _itemCount != 1
+                                ? IconButton(
+                                    icon: Icon(
+                                      Icons.remove,
+                                      size: 14,
+                                    ),
+                                    onPressed: () =>
+                                        setState(() => _itemCount--),
+                                  )
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.remove,
+                                      size: 14,
+                                    ),
+                                    onPressed: () {}),
+                            Text(
+                              _itemCount.toString(),
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.add,
+                                  size: 14,
+                                ),
+                                onPressed: () => setState(() => _itemCount++))
+                          ],
+                        ))
                       ],
                     ),
                   ),
-                  Container(
-                      child: Row(
-                    children: [
-                      _itemCount != 1
-                          ? IconButton(
-                              icon: Icon(
-                                Icons.remove,
-                                size: 16,
-                              ),
-                              onPressed: () => setState(() => _itemCount--),
-                            )
-                          : IconButton(
-                              icon: Icon(
-                                Icons.remove,
-                                size: 16,
-                              ),
-                              onPressed: () {}),
-                      Text(_itemCount.toString()),
-                      IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            size: 16,
-                          ),
-                          onPressed: () => setState(() => _itemCount++))
-                    ],
-                  ))
                 ],
               ),
             ),

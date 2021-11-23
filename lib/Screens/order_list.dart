@@ -1,9 +1,10 @@
+//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 
 class OrderList extends StatefulWidget {
-  const OrderList({Key? key}) : super(key: key);
+  const OrderList({Key key}) : super(key: key);
 
   @override
   State<OrderList> createState() => _OrderListState();
@@ -13,7 +14,7 @@ class _OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).backgroundColor,
         bottomNavigationBar: const BottomNavigationBarTravel(),
         body: SingleChildScrollView(
           child: Column(children: <Widget>[
@@ -29,8 +30,9 @@ class _OrderListState extends State<OrderList> {
                       'ORDER LIST',
                       style: GoogleFonts.montserrat(
                         fontSize: 20.0,
-                        fontWeight: FontWeight.w300,
-                        textStyle: TextStyle(color: Colors.white),
+                        fontWeight: FontWeight.bold,
+                        textStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color),
                       ),
                     ),
                   ),

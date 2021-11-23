@@ -63,7 +63,7 @@ class _ProfileState extends State<Profile> {
                                   child: Text(
                                     'My Profile',
                                     style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w300,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 25.0,
                                       color: Theme.of(context)
                                           .textTheme

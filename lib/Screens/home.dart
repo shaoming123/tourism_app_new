@@ -8,9 +8,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tourismapp/Screens/sign_in.dart';
-import 'package:tourismapp/models/beach_model.dart';
-import 'package:tourismapp/models/popular_model.dart';
-import 'package:tourismapp/models/recommended_model.dart';
+
+import 'package:tourismapp/models/tourism_model.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -50,7 +49,7 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(builder: (context) => const SignIn()));
   }
 
-  listItem(String img, String country, String message) {
+  listItem(String img, String country, String message, String index) {
     return Padding(
       padding: EdgeInsets.all(15.0),
       child: Container(
@@ -100,9 +99,7 @@ class _HomeState extends State<Home> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailPage(
-                            img: img,
-                            country: country,
-                          ),
+                              img: img, country: country, index: index),
                         ),
                       );
                     },
@@ -167,7 +164,7 @@ class _HomeState extends State<Home> {
                       'HOME',
                       style: GoogleFonts.montserrat(
                         fontSize: 20.0,
-                        fontWeight: FontWeight.w300,
+                        fontWeight: FontWeight.bold,
                         textStyle: TextStyle(
                           color: Theme.of(context).primaryColor,
                         ),
@@ -195,13 +192,13 @@ class _HomeState extends State<Home> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
-                  child: ListView(
-                    children: <Widget>[
-                      listItem('Assets/images/japan.jpg', 'Japan',
-                          'Explore the land of the rising sun'),
-                      listItem('Assets/images/canada.jpg', 'Canada',
-                          'Explore the vast forests of Canada'),
-                    ],
+                  child: ListView.builder(
+                    itemCount: tourism.length,
+                    itemBuilder: (BuildContext context, int index) => listItem(
+                        tourism[index].countryImage,
+                        tourism[index].countryName,
+                        tourism[index].shortDescription,
+                        index.toString()),
                   ),
                 ),
               ),

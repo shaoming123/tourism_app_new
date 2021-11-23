@@ -1,3 +1,4 @@
+//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
@@ -5,7 +6,7 @@ import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 import 'details_page.dart';
 
 class Favorite extends StatefulWidget {
-  const Favorite({Key? key}) : super(key: key);
+  const Favorite({Key key}) : super(key: key);
 
   @override
   State<Favorite> createState() => _FavoriteState();
@@ -95,8 +96,8 @@ class _FavoriteState extends State<Favorite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      bottomNavigationBar: const BottomNavigationBarTravel(),
+      backgroundColor: Theme.of(context).backgroundColor,
+      bottomNavigationBar: BottomNavigationBarTravel(),
       body: SingleChildScrollView(
         child: Column(children: <Widget>[
           const SizedBox(height: 20.0),
@@ -111,8 +112,9 @@ class _FavoriteState extends State<Favorite> {
                     'FAVORITE',
                     style: GoogleFonts.montserrat(
                       fontSize: 20.0,
-                      fontWeight: FontWeight.w300,
-                      textStyle: TextStyle(color: Colors.white),
+                      fontWeight: FontWeight.bold,
+                      textStyle: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color),
                     ),
                   ),
                 ),

@@ -195,8 +195,8 @@ class _SignInState extends State<SignIn> {
           .user;
 
       if (user != null) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const Home()));
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
       } else {
         _scaffoldKey.currentState.showSnackBar(
           const SnackBar(
