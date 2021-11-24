@@ -16,7 +16,8 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  listItem(String img, String place, String price, String index) {
+  listItem(String img, String place, String priceStart, String priceEnd,
+      String index) {
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: InkWell(
@@ -55,7 +56,7 @@ class _DetailPageState extends State<DetailPage> {
                       color: Colors.white),
                   child: Center(
                     child: Icon(
-                      Icons.favorite_border,
+                      Icons.shopping_cart_outlined,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
@@ -76,7 +77,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     SizedBox(height: 5.0),
                     Text(
-                      price,
+                      "RM " + priceStart + " - " + priceEnd,
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w400,
                           fontSize: 14.0,
@@ -317,7 +318,9 @@ class _DetailPageState extends State<DetailPage> {
                                   tourism[int.parse(widget.index)]
                                       .stateName[index + 1],
                                   tourism[int.parse(widget.index)]
-                                      .priceRange[index + 1],
+                                      .priceStart[index + 1],
+                                  tourism[int.parse(widget.index)]
+                                      .priceEnd[index + 1],
                                   (index + 1).toString()),
                         ),
                       )

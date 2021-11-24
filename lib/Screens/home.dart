@@ -134,76 +134,80 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      bottomNavigationBar: const BottomNavigationBarTravel(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 20.0),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 15.0, top: 20.0, right: 15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    height: 50.0,
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    child: Icon(
-                      Icons.filter_list,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      'HOME',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        textStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        bottomNavigationBar: const BottomNavigationBarTravel(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 20.0),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 15.0, top: 20.0, right: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
                       height: 50.0,
                       width: 50.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: Theme.of(context).primaryColor,
                       ),
-                      child: IconButton(
-                          icon: const Icon(Icons.logout),
-                          color: Colors.white,
-                          onPressed: () {
-                            logout();
-                          })),
-                ],
+                      child: Icon(
+                        Icons.filter_list,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        'HOME',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          textStyle: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        child: IconButton(
+                            icon: const Icon(Icons.logout),
+                            color: Colors.white,
+                            onPressed: () {
+                              logout();
+                            })),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height - 150.0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: ListView.builder(
-                    itemCount: tourism.length,
-                    itemBuilder: (BuildContext context, int index) => listItem(
-                        tourism[index].countryImage,
-                        tourism[index].countryName,
-                        tourism[index].shortDescription,
-                        index.toString()),
+              SizedBox(
+                height: MediaQuery.of(context).size.height - 150.0,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ListView.builder(
+                      itemCount: tourism.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          listItem(
+                              tourism[index].countryImage,
+                              tourism[index].countryName,
+                              tourism[index].shortDescription,
+                              index.toString()),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

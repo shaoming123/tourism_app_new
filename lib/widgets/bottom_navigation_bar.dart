@@ -1,7 +1,7 @@
 //@dart=2.9
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tourismapp/Screens/favorite.dart';
+import 'package:tourismapp/Screens/cart.dart';
 import 'package:tourismapp/Screens/home.dart';
 import 'package:tourismapp/Screens/profile_page.dart';
 import 'package:tourismapp/Screens/sign_in.dart';
@@ -40,7 +40,7 @@ class _BottomNavigationBarTravelState extends State<BottomNavigationBarTravel> {
           Navigator.pushNamed(context, '/home');
           break;
         case 1:
-          Navigator.pushNamed(context, '/favorite');
+          Navigator.pushNamed(context, '/cart');
           break;
         case 2:
           Navigator.pushNamed(context, '/order');
@@ -77,16 +77,16 @@ class _BottomNavigationBarTravelState extends State<BottomNavigationBarTravel> {
             backgroundColor: Theme.of(context).backgroundColor,
             icon: selectedItem == 1
                 ? Icon(
-                    Icons.favorite,
+                    Icons.shopping_cart,
                     color: Theme.of(context).primaryColor,
                     size: 35,
                   )
                 : Icon(
-                    Icons.favorite,
+                    Icons.shopping_cart,
                     color: Theme.of(context).primaryColor,
                     size: 28,
                   ),
-            label: 'Home'),
+            label: 'Cart'),
         BottomNavigationBarItem(
             backgroundColor: Theme.of(context).backgroundColor,
             icon: selectedItem == 2
@@ -100,7 +100,7 @@ class _BottomNavigationBarTravelState extends State<BottomNavigationBarTravel> {
                     color: Theme.of(context).primaryColor,
                     size: 28,
                   ),
-            label: 'Home'),
+            label: 'History'),
         BottomNavigationBarItem(
             backgroundColor: Theme.of(context).backgroundColor,
             icon: selectedItem == 3
@@ -114,7 +114,7 @@ class _BottomNavigationBarTravelState extends State<BottomNavigationBarTravel> {
                     color: Theme.of(context).primaryColor,
                     size: 29,
                   ),
-            label: 'Home'),
+            label: 'Profile'),
       ],
       backgroundColor: Theme.of(context).backgroundColor,
     );

@@ -7,7 +7,7 @@ import 'package:tourismapp/Screens/profile_page.dart';
 import 'package:tourismapp/store/theme_management.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
 
-import 'Screens/favorite.dart';
+import 'Screens/cart.dart';
 import 'Screens/home.dart';
 import 'Screens/sign_in.dart';
 
@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           theme: theme.getTheme(),
           routes: {
             '/home': (context) => const Home(),
-            '/favorite': (context) => const Favorite(),
+            '/cart': (context) => const Cart(),
             '/order': (context) => const OrderList(),
             '/profile': (context) => const Profile(),
           },

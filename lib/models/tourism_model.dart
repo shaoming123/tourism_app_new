@@ -7,7 +7,9 @@ class TourismModel {
   List<String> stateImage;
   List<String> description;
   List<String> package;
-  List<String> priceRange;
+  List<String> priceStart;
+  List<String> priceEnd;
+  List<String> hotelPrice;
   List<String> date;
   List<String> hotelStar;
   List<String> hotelImage;
@@ -22,7 +24,9 @@ class TourismModel {
     this.stateImage,
     this.package,
     this.description,
-    this.priceRange,
+    this.priceStart,
+    this.priceEnd,
+    this.hotelPrice,
     this.date,
     this.hotelStar,
     this.hotelImage,
@@ -40,7 +44,9 @@ List<TourismModel> tourism = tourismData
         item['stateImage'],
         item['package'],
         item['description'],
-        item['priceRange'],
+        item['priceStart'],
+        item['priceEnd'],
+        item['hotelPrice'],
         item['date'],
         item['hotelStar'],
         item['hotelImage'],
@@ -72,11 +78,12 @@ var tourismData = [
       "Of the major cities in Japan, Sapporo, in Hokkaido Prefecture, is Japan’s northernmost major city and the nation's fifth-largest overall. The chilly climate makes it the ideal destination for people who enjoy the winter season. The city is the site of the famous Sapporo Snow Festival, an event held each February showcasing an array of marvelous ice and snow sculptures that is visited by about 2 million people each year!",
       "Nagoya has long been the center of Japan’s automotive and aviation manufacturing, as well as a technological hub with a growing robotics industry. Visitors can explore Nagoya’s tech-centric side by visiting the Nagoya City Science Museum, the SCMaglev and Railway Park, or either of the two Toyota museums."
     ],
-    "priceRange": [
-      "RM 700 - 900",
-      "RM 400 - 550",
-      "RM 500 - 750",
-      "RM 550 - 750"
+    "priceStart": ["700", "400", "500", "550"],
+    "priceEnd": ["1050", "750", "850", "900"],
+    "hotelPrice": [
+      "150",
+      "250",
+      "350",
     ],
     "date": [
       "18.1.2022 - 26.1.2022",
@@ -129,11 +136,12 @@ var tourismData = [
       "A guided tour of Parliament Building on Parliament Hill will give you a peek into the world of Canadian government — and the building itself is quite the masterpiece. The city is also home to some of the best museums and galleries in the country. The Canadian War Museum explores the history of Canada's military and the major events and conflicts that shaped the country as we know it today. And that's just the tip of the cultural iceberg: there's also the National Gallery of Canada, the Canadian Museum of History, the Canadian Museum of Nature, and the Canadian Aviation and Space Museum, to name a few.",
       "The capital of Ontario, the largest city in Canada, and the city that attracts the most visitors in the entire country — there's a lot to be said for Toronto, a bustling city of almost three million people, which is why it earned the top spot on this list. \n First, there are the infamous Toronto landmarks. You can't mention Toronto without thinking of the iconic CN Tower, and many tourists take the time to visit popular destinations like Toronto Island, Casa Loma, and the Toronto Zoo as well"
     ],
-    "priceRange": [
-      "RM 1200 - 1600",
-      "RM 800 - 1050",
-      "RM 700 - 950",
-      "RM 550 - 750"
+    "priceStart": ["1200", "800", "500", "700"],
+    "priceEnd": ["1800", "1400", "1100", "1300"],
+    "hotelPrice": [
+      "200",
+      "400",
+      "600",
     ],
     "date": [
       "18.1.2022 - 26.1.2022",
@@ -186,11 +194,12 @@ var tourismData = [
       "Of the major cities in Japan, Sapporo, in Hokkaido Prefecture, is Japan’s northernmost major city and the nation's fifth-largest overall. The chilly climate makes it the ideal destination for people who enjoy the winter season. The city is the site of the famous Sapporo Snow Festival, an event held each February showcasing an array of marvelous ice and snow sculptures that is visited by about 2 million people each year!",
       "Nagoya has long been the center of Japan’s automotive and aviation manufacturing, as well as a technological hub with a growing robotics industry. Visitors can explore Nagoya’s tech-centric side by visiting the Nagoya City Science Museum, the SCMaglev and Railway Park, or either of the two Toyota museums."
     ],
-    "priceRange": [
-      "RM 1800 - 2200",
-      "RM 1000 - 1250",
-      "RM 800 - 950",
-      "RM 650 - 750"
+    "priceStart": ["1800", "1000", "800", "650"],
+    "priceEnd": ["2400", "1600", "1400", "1250"],
+    "hotelPrice": [
+      "250",
+      "400",
+      "600",
     ],
     "date": [
       "18.1.2022 - 26.1.2022",

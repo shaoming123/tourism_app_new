@@ -1,4 +1,6 @@
 //@dart=2.9
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tourismapp/widgets/bottom_navigation_bar.dart';
@@ -11,59 +13,88 @@ class OrderList extends StatefulWidget {
 }
 
 class _OrderListState extends State<OrderList> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  User _user;
+
+  @override
+  void initState() {
+    _user = _auth.currentUser;
+
+    firestore.collection("transaction").get().then((value) {
+      for (var v in value.docs) {
+        if (_user.uid == v.data()["uid"]) {
+          setState(() {
+            orderHistory.add(OrderModel(
+                v.data()["country"],
+                v.data()["date"],
+                v.data()["destination"],
+                v.data()["package_date"],
+                v.data()["package_quantity"],
+                v.data()["total_amount"]));
+          });
+        }
+      }
+    });
+    print(orderHistory);
+    super.initState();
+  }
+
+  List<OrderModel> orderHistory = [];
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        bottomNavigationBar: const BottomNavigationBarTravel(),
-        body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-            const SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, top: 40.0, right: 15.0, bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Text(
-                      'ORDER LIST',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        textStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
+          bottomNavigationBar: const BottomNavigationBarTravel(),
+          body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              const SizedBox(height: 20.0),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, top: 40.0, right: 15.0, bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Center(
+                      child: Text(
+                        'ORDER LIST',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          textStyle: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height - 100.0,
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Center(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 10,
-                    itemBuilder: (BuildContext context, int index) => listItem(
-                        'Assets/images/japan.jpg',
-                        'Malaysia,',
-                        'Kuala Lumpur',
-                        'Japan,',
-                        'Tokyo'),
+              Container(
+                height: MediaQuery.of(context).size.height - 100.0,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 80.0),
+                  child: Center(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: orderHistory.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          listItem(orderHistory[index]),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ]),
-        ));
+            ]),
+          )),
+    );
   }
 
-  listItem(String img, String orginCountry, String originState,
-      String destinationCountry, String destinationState) {
+  listItem(orderlist) {
     return Padding(
       padding: EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Container(
@@ -75,7 +106,7 @@ class _OrderListState extends State<OrderList> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width - 55,
-                  height: 160,
+                  height: 220,
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                   decoration: BoxDecoration(
                       color: Color(0xffE9F4F9),
@@ -89,61 +120,72 @@ class _OrderListState extends State<OrderList> {
                             SizedBox(
                               height: 55,
                             ),
-                            Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    color: Color(0xffD5E6F2),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Icon(
-                                  Icons.airplanemode_active,
-                                  size: 25,
-                                )),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                "Airplane",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff5A6C64)),
-                              ),
-                            ),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  orginCountry,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xff5A6C64)),
-                                ),
+                                Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffD5E6F2),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Icon(
+                                      Icons.airplanemode_active,
+                                      size: 25,
+                                    )),
                                 SizedBox(
-                                  height: 6,
+                                  height: 5,
                                 ),
-                                Text(
-                                  originState,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xff5A6C64)),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    "Airplane",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  "01:30 PM",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xff5A6C64)),
-                                )
                               ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 25),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Malaysia",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Text(
+                                    "Kuala Lumpur",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Text(
+                                    "01:30 PM",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  )
+                                ],
+                              ),
                             ),
                             Padding(
                               padding:
@@ -155,7 +197,7 @@ class _OrderListState extends State<OrderList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  destinationCountry,
+                                  orderlist.country,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 14,
@@ -166,7 +208,7 @@ class _OrderListState extends State<OrderList> {
                                   height: 6,
                                 ),
                                 Text(
-                                  destinationState,
+                                  orderlist.destination,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 12,
@@ -180,7 +222,7 @@ class _OrderListState extends State<OrderList> {
                                   "04:30 PM",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                       color: Color(0xff5A6C64)),
                                 )
@@ -202,7 +244,7 @@ class _OrderListState extends State<OrderList> {
                               Row(
                                 children: [
                                   Text(
-                                    "Date: ",
+                                    "Package :  ",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 12,
@@ -210,7 +252,7 @@ class _OrderListState extends State<OrderList> {
                                         color: Color(0xff5A6C64)),
                                   ),
                                   Text(
-                                    "18.1.2022 - 21.1.2022",
+                                    orderlist.package_day,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 12,
@@ -219,10 +261,38 @@ class _OrderListState extends State<OrderList> {
                                   ),
                                 ],
                               ),
+                              // Row(
+                              //   children: [
+                              //     Text(
+                              //       "Package : ",
+                              //       textAlign: TextAlign.center,
+                              //       style: TextStyle(
+                              //           fontSize: 12,
+                              //           fontWeight: FontWeight.w600,
+                              //           color: Color(0xff5A6C64)),
+                              //     ),
+                              //     Text(
+                              //         orderlist.package_number,
+                              //       textAlign: TextAlign.center,
+                              //       style: TextStyle(
+                              //           fontSize: 12,
+                              //           fontWeight: FontWeight.w600,
+                              //           color: Color(0xff5A6C64)),
+                              //     ),
+                              //   ],
+                              // ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Row(
                                 children: [
                                   Text(
-                                    "Seat No. ",
+                                    "Package Quantity :  ",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 12,
@@ -230,7 +300,7 @@ class _OrderListState extends State<OrderList> {
                                         color: Color(0xff5A6C64)),
                                   ),
                                   Text(
-                                    "L2230",
+                                    (orderlist.package_number).toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 12,
@@ -241,7 +311,63 @@ class _OrderListState extends State<OrderList> {
                               ),
                             ],
                           ),
-                        )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Date :  ",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  ),
+                                  Text(
+                                    orderlist.date,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Total : RM  ",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  ),
+                                  Text(
+                                    orderlist.totalAmount,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5A6C64)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -253,4 +379,16 @@ class _OrderListState extends State<OrderList> {
       )),
     );
   }
+}
+
+class OrderModel {
+  final String country;
+  final String date;
+  final String destination;
+  final String package_day;
+  final int package_number;
+  final String totalAmount;
+
+  OrderModel(this.country, this.date, this.destination, this.package_day,
+      this.package_number, this.totalAmount);
 }

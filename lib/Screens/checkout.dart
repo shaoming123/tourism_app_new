@@ -1,34 +1,220 @@
 //@dart=2.9
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tourismapp/Screens/failure.dart';
+import 'package:tourismapp/Screens/successful.dart';
 import 'package:tourismapp/models/tourism_model.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class Checkout extends StatefulWidget {
   final countryIndex, index;
 
-  const Checkout({Key key, this.countryIndex, this.index}) : super(key: key);
+  Checkout({Key key, this.countryIndex, this.index}) : super(key: key);
 
   @override
   State<Checkout> createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  User _user;
+  Razorpay _razorpay;
+  int amount;
+  int initalPrice;
+  String package = "";
+  String date = "";
+  String hotel = "";
+  String country = "";
+  String destination = "";
+  String transport = "airplane";
+  String user_id = "";
+  String package_id = "";
+
+  //hotel quantity
   int _itemCount = 1;
+  int _hotel_3 = 1;
+  int _hotel_4 = 0;
+  int _hotel_5 = 0;
+  int _hotelTotal;
+
+  //hotel price
+  int hotel3_price;
+  int hotel4_price;
+  int hotel5_price;
+
+  int hotel_type;
+
+  int package_price;
+
+  //User data
+  String _username;
+  String _phone;
+  String _email;
+
+  @override
+  void initState() {
+    _user = _auth.currentUser;
+    _razorpay = Razorpay();
+
+    firestore.collection("users").doc(_user.uid).get().then((value) {
+      setState(() {
+        _username = value.data()['username'];
+        _phone = value.data()['phone'];
+        _email = value.data()['email'];
+      });
+    });
+
+    _hotelTotal = _hotel_3 + _hotel_4 + _hotel_5;
+    amount = (int.parse(tourism[int.parse(widget.countryIndex)]
+            .priceStart[int.parse(widget.index)])) +
+        (int.parse(tourism[int.parse(widget.countryIndex)].hotelPrice[0]));
+    initalPrice = int.parse(tourism[int.parse(widget.countryIndex)]
+        .priceStart[int.parse(widget.index)]);
+    package_price = int.parse(tourism[int.parse(widget.countryIndex)]
+        .priceStart[int.parse(widget.index)]);
+
+    //hotel price
+    hotel3_price =
+        int.parse(tourism[int.parse(widget.countryIndex)].hotelPrice[0]);
+    hotel4_price =
+        int.parse(tourism[int.parse(widget.countryIndex)].hotelPrice[1]);
+    hotel5_price =
+        int.parse(tourism[int.parse(widget.countryIndex)].hotelPrice[2]);
+
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    super.initState();
+  }
+
+  void totalAmount() {
+    setState(() {
+      package_price = (initalPrice * _itemCount);
+
+      amount = (initalPrice * _itemCount) +
+          (hotel3_price * _hotel_3) +
+          (hotel4_price * _hotel_4) +
+          (hotel5_price * _hotel_5);
+    });
+  }
+
+  void openCheckout(totalAmount) {
+    var options = {
+      'key': 'rzp_test_HrKYY6mdiMRJLt',
+      'amount': (double.parse(totalAmount.toString()) * 100.roundToDouble())
+          .toString(),
+      'name': _username,
+      'description': 'Buy Tourism Package',
+      'prefill': {'contact': _phone, 'email': _email},
+      'external': {
+        'wallets': ['']
+      },
+      'currency': 'MYR'
+    };
+
+    try {
+      _razorpay.open(options);
+      // totala(total);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  // void totala(total) {
+  //   double test = (double.parse(_controller.text));
+  //   double word = double.parse(total);
+  //   total = word + test;
+  //   print(total);
+  // }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    addToDb();
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => SuccessfulPage()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // ignore: deprecated_member_use
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => FailurePage()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // ignore: deprecated_member_use
+    Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("EXTERNAL_WALLET: " + response.walletName)));
+  }
+
+  void addToDb() {
+    String transaction_id =
+        _user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+
+    try {
+      firestore.collection("transaction").doc(transaction_id).set({
+        "transaction_id": transaction_id,
+        "uid": _user.uid,
+        'country': tourism[int.parse(widget.countryIndex)].countryName,
+        'destination': tourism[int.parse(widget.countryIndex)]
+            .stateName[int.parse(widget.index)],
+        'total_amount': amount.toString(),
+        'package_date': tourism[int.parse(widget.countryIndex)]
+            .package[int.parse(widget.index)],
+        'date': tourism[int.parse(widget.countryIndex)]
+            .date[int.parse(widget.index)],
+        'package_quantity': _itemCount,
+        'transport': transport,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      _scaffoldKey.currentState.showSnackBar(
+        const SnackBar(
+          content: Text(""),
+        ),
+      );
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: ButtonTheme(
         minWidth: MediaQuery.of(context).size.width - 50,
         height: 56,
         child: RaisedButton(
-          onPressed: () => {},
+          onPressed: () => {
+            _hotelTotal != _itemCount
+                ? _scaffoldKey.currentState.showSnackBar(
+                    const SnackBar(
+                      content: Text("Please select your hotel !"),
+                    ),
+                  )
+                : openCheckout(amount.toString())
+          },
           shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(10.0),
+            borderRadius: new BorderRadius.circular(30.0),
           ),
           color: Theme.of(context).primaryColor,
           child: Text(
-            "Pay: RM 2345.00",
+            "Pay: RM " + amount.toString(),
             overflow: TextOverflow.visible,
             style: GoogleFonts.montserrat(
               color: Theme.of(context).textTheme.bodyText2.color,
@@ -41,6 +227,7 @@ class _CheckoutState extends State<Checkout> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SingleChildScrollView(
           child: Container(
+              // height: MediaQuery.of(context).size.height * 10,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -51,6 +238,7 @@ class _CheckoutState extends State<Checkout> {
               ),
               child: Row(
                 children: [
+                  SizedBox(height: 100),
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
@@ -151,7 +339,7 @@ class _CheckoutState extends State<Checkout> {
                                         height: 13,
                                       ),
                                       Text(
-                                        "RM 200",
+                                        "RM " + package_price.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontSize: 13,
@@ -172,8 +360,16 @@ class _CheckoutState extends State<Checkout> {
                                                   Icons.remove,
                                                   size: 14,
                                                 ),
-                                                onPressed: () => setState(
-                                                    () => _itemCount--),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _itemCount--;
+                                                    _hotelTotal = _hotel_3 +
+                                                        _hotel_4 +
+                                                        _hotel_5;
+                                                  });
+
+                                                  totalAmount();
+                                                },
                                               )
                                             : IconButton(
                                                 icon: Icon(
@@ -186,12 +382,20 @@ class _CheckoutState extends State<Checkout> {
                                           style: TextStyle(color: Colors.black),
                                         ),
                                         IconButton(
-                                            icon: Icon(
-                                              Icons.add,
-                                              size: 14,
-                                            ),
-                                            onPressed: () =>
-                                                setState(() => _itemCount++))
+                                          icon: Icon(
+                                            Icons.add,
+                                            size: 14,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _itemCount++;
+                                              _hotelTotal = _hotel_3 +
+                                                  _hotel_4 +
+                                                  _hotel_5;
+                                            });
+                                            totalAmount();
+                                          },
+                                        )
                                       ],
                                     ))
                               ],
@@ -364,9 +568,9 @@ class _CheckoutState extends State<Checkout> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height - 230.0,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+              height: MediaQuery.of(context).size.height - 100.0,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 50),
                 child: Center(
                   child: Column(
                     children: [
@@ -375,18 +579,24 @@ class _CheckoutState extends State<Checkout> {
                         tourism[int.parse(widget.countryIndex)].hotelName[0],
                         tourism[int.parse(widget.countryIndex)].hotelRoom[0],
                         tourism[int.parse(widget.countryIndex)].hotelStar[0],
+                        tourism[int.parse(widget.countryIndex)].hotelPrice[0],
+                        hotel_type = 3,
                       ),
                       hotellist(
                         tourism[int.parse(widget.countryIndex)].hotelImage[1],
                         tourism[int.parse(widget.countryIndex)].hotelName[1],
                         tourism[int.parse(widget.countryIndex)].hotelRoom[1],
                         tourism[int.parse(widget.countryIndex)].hotelStar[1],
+                        tourism[int.parse(widget.countryIndex)].hotelPrice[1],
+                        hotel_type = 4,
                       ),
                       hotellist(
                         tourism[int.parse(widget.countryIndex)].hotelImage[2],
                         tourism[int.parse(widget.countryIndex)].hotelName[2],
                         tourism[int.parse(widget.countryIndex)].hotelRoom[2],
                         tourism[int.parse(widget.countryIndex)].hotelStar[2],
+                        tourism[int.parse(widget.countryIndex)].hotelPrice[1],
+                        hotel_type = 5,
                       ),
                     ],
                   ),
@@ -397,7 +607,8 @@ class _CheckoutState extends State<Checkout> {
     );
   }
 
-  hotellist(String img, String place, String room, String star) {
+  hotellist(String img, String place, String room, String star, String price,
+      int hotel_type) {
     final children = <Widget>[];
     for (var i = 0; i < int.parse(star); i++) {
       children.add(
@@ -405,7 +616,7 @@ class _CheckoutState extends State<Checkout> {
       );
     }
     return Container(
-      height: 120,
+      height: 130,
       margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -423,7 +634,7 @@ class _CheckoutState extends State<Checkout> {
             ),
           ]),
       child: Container(
-        padding: EdgeInsets.only(left: 5, top: 15),
+        padding: EdgeInsets.only(left: 5, top: 18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -439,8 +650,8 @@ class _CheckoutState extends State<Checkout> {
                     child: Image.asset(
                       img,
                       fit: BoxFit.fill,
-                      width: MediaQuery.of(context).size.width - 250,
-                      height: MediaQuery.of(context).size.height - 650,
+                      width: MediaQuery.of(context).size.width * 0.30,
+                      height: MediaQuery.of(context).size.height * 0.13,
                     ),
                   ),
                   // SizedBox(
@@ -494,31 +705,115 @@ class _CheckoutState extends State<Checkout> {
                         Container(
                             child: Row(
                           children: [
-                            _itemCount != 1
+                            _itemCount > 0 &&
+                                    (_hotel_3 >= 0 &&
+                                        _hotel_4 >= 0 &&
+                                        _hotel_5 >= 0)
                                 ? IconButton(
                                     icon: Icon(
                                       Icons.remove,
                                       size: 14,
                                     ),
-                                    onPressed: () =>
-                                        setState(() => _itemCount--),
-                                  )
+                                    onPressed: () {
+                                      setState(() {
+                                        if (hotel_type == 3) {
+                                          _hotel_3--;
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        } else if (hotel_type == 4) {
+                                          _hotel_4--;
+                                          if (_hotel_4 == 0) {
+                                            _hotel_4 = 0;
+                                          }
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        } else if (hotel_type == 5) {
+                                          _hotel_5--;
+                                          if (_hotel_5 == 0) {
+                                            _hotel_5 = 0;
+                                          }
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        }
+
+                                        if (_hotel_3.isNegative) {
+                                          _hotel_3 = 0;
+
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        } else if (_hotel_4.isNegative) {
+                                          _hotel_4 = 0;
+
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        } else if (_hotel_5.isNegative) {
+                                          _hotel_5 = 0;
+
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        }
+                                      });
+                                      totalAmount();
+                                    })
                                 : IconButton(
                                     icon: Icon(
                                       Icons.remove,
                                       size: 14,
                                     ),
                                     onPressed: () {}),
-                            Text(
-                              _itemCount.toString(),
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            IconButton(
-                                icon: Icon(
-                                  Icons.add,
-                                  size: 14,
-                                ),
-                                onPressed: () => setState(() => _itemCount++))
+                            if (hotel_type == 3) ...[
+                              Text(
+                                _hotel_3.toString(),
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ] else if (hotel_type == 4) ...[
+                              Text(
+                                _hotel_4.toString(),
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ] else if (hotel_type == 5) ...[
+                              Text(
+                                _hotel_5.toString(),
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ],
+                            _hotelTotal < _itemCount
+                                ? IconButton(
+                                    icon: Icon(
+                                      Icons.add,
+                                      size: 14,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _hotelTotal =
+                                            _hotel_3 + _hotel_4 + _hotel_5;
+                                        if (hotel_type == 3) {
+                                          _hotel_3++;
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        } else if (hotel_type == 4) {
+                                          _hotel_4++;
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        } else if (hotel_type == 5) {
+                                          _hotel_5++;
+                                          _hotelTotal =
+                                              _hotel_3 + _hotel_4 + _hotel_5;
+                                        }
+                                      });
+                                      totalAmount();
+                                    })
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.add,
+                                      size: 14,
+                                    ),
+                                    onPressed: () {
+                                      _scaffoldKey.currentState.showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  "Hotel Room Quantity is enough !")));
+                                    }),
                           ],
                         ))
                       ],

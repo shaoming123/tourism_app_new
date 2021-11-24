@@ -45,6 +45,8 @@ dependencies:
   google_fonts: ^2.1.0
   smooth_page_indicator: ^0.2.3
   cached_network_image: ^3.0.0
+  razorpay_flutter: ^1.2.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,8 +72,11 @@ flutter:
   assets:
     - Assets/image1.png
     - Assets/face.jpg
+    - Assets/ico_fail.jpg
+    - Assets/ico_succ.png
     - Assets/images/
     - Assets/svg/
+    - Assets/initial/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

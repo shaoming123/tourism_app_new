@@ -1,13 +1,16 @@
 //@dart=2.9
-import 'dart:ffi';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tourismapp/Screens/checkout.dart';
 import 'package:tourismapp/models/beach_model.dart';
 import 'package:tourismapp/models/popular_model.dart';
 import 'package:tourismapp/models/tourism_model.dart';
+
+import 'cart.dart';
 
 class SelectedDetails extends StatefulWidget {
   final countryIndex, index;
@@ -19,35 +22,104 @@ class SelectedDetails extends StatefulWidget {
 }
 
 class _SelectedDetailsState extends State<SelectedDetails> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  List<String> cartList = [];
+//  String uid = "";
+//   String _phone = "";
+//   String _email = "";
+  User _user;
+  @override
+  void initState() {
+    _user = _auth.currentUser;
+
+    super.initState();
+  }
+
+  void addtoCart(country, state) {
+    String cart_id =
+        _user.uid + DateTime.now().millisecondsSinceEpoch.toString();
+
+    try {
+      firestore.collection("cart").doc(cart_id).set({
+        "cartId": cart_id,
+        "uid": _user.uid,
+        'countryNum': country,
+        'stateNum': state,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      _scaffoldKey.currentState.showSnackBar(
+        const SnackBar(
+          content: Text("Tourism Package added successfully !"),
+        ),
+      );
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: ButtonTheme(
-        minWidth: MediaQuery.of(context).size.width - 60,
-        height: 56,
-        child: RaisedButton(
-          onPressed: () => {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Checkout(
-                    countryIndex: widget.countryIndex, index: widget.index),
+      floatingActionButton: Container(
+        margin: EdgeInsets.symmetric(horizontal: 15),
+        child: ButtonTheme(
+          minWidth: MediaQuery.of(context).size.width - 200,
+          height: 56,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              RaisedButton(
+                onPressed: () => {addtoCart(widget.countryIndex, widget.index)},
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0),
+                ),
+                color: Theme.of(context).primaryColor,
+                child: Text(
+                  "Add to Cart",
+                  overflow: TextOverflow.visible,
+                  style: GoogleFonts.montserrat(
+                    color: Theme.of(context).textTheme.bodyText2.color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
               ),
-            )
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(10.0),
-          ),
-          color: Theme.of(context).primaryColor,
-          child: Text(
-            "BOOK NOW",
-            overflow: TextOverflow.visible,
-            style: GoogleFonts.montserrat(
-              color: Theme.of(context).textTheme.bodyText2.color,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+              RaisedButton(
+                onPressed: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Checkout(
+                          countryIndex: widget.countryIndex,
+                          index: widget.index),
+                    ),
+                  )
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0),
+                ),
+                color: Theme.of(context).primaryColor,
+                child: Text(
+                  "Book Now",
+                  overflow: TextOverflow.visible,
+                  style: GoogleFonts.montserrat(
+                    color: Theme.of(context).textTheme.bodyText2.color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -96,10 +168,17 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                                 width: 24,
                               ),
                               IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.favorite,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Cart(),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(Icons.shopping_cart_outlined,
                                     color: Theme.of(context).primaryColor,
-                                    size: 30),
+                                    size: 35),
                               ),
                             ],
                           ),
@@ -189,8 +268,12 @@ class _SelectedDetailsState extends State<SelectedDetails> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
-                      tourism[int.parse(widget.countryIndex)]
-                          .priceRange[int.parse(widget.index)],
+                      "RM " +
+                          (tourism[int.parse(widget.countryIndex)]
+                              .priceStart[int.parse(widget.index)]) +
+                          " - " +
+                          (tourism[int.parse(widget.countryIndex)]
+                              .priceEnd[int.parse(widget.index)]),
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 25,
