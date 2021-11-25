@@ -131,13 +131,6 @@ class _DetailPageState extends State<DetailPage> {
                   Container(
                     height: 50.0,
                     width: 50.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Theme.of(context).primaryColor),
-                    child: Icon(
-                      Icons.bookmark_border,
-                      color: Colors.white,
-                    ),
                   ),
                 ],
               ),
