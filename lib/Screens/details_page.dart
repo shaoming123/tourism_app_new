@@ -46,23 +46,6 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
               Positioned(
-                top: 15.0,
-                right: 15.0,
-                child: Container(
-                  height: 30.0,
-                  width: 30.0,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: Colors.white),
-                  child: Center(
-                    child: Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
                 top: 120.0,
                 left: 15.0,
                 child: Column(
@@ -85,7 +68,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -178,15 +161,11 @@ class _DetailPageState extends State<DetailPage> {
                                 style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25.0,
-                                  textStyle: TextStyle(
-                                    color: Colors.white,
+                                  textStyle: const TextStyle(
+                                    color: Colors.black,
                                   ),
                                 ),
                               ),
-                              // Icon(
-                              //   Icons.more_vert,
-                              //   color: Colors.white,
-                              // ),
                             ],
                           ),
                         ),
@@ -266,20 +245,6 @@ class _DetailPageState extends State<DetailPage> {
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(right: 20.0),
-                                        child: Container(
-                                          height: 30.0,
-                                          width: 30.0,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            color: Colors.white,
-                                          ),
-                                          child: Icon(
-                                            Icons.arrow_forward_ios,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
                                       ),
                                     ],
                                   ),
@@ -298,12 +263,11 @@ class _DetailPageState extends State<DetailPage> {
                             fontWeight: FontWeight.bold,
                             fontSize: 25.0,
                             textStyle: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 15.0),
                       Container(
                         height: 200.0,
                         width: MediaQuery.of(context).size.width,
@@ -323,7 +287,7 @@ class _DetailPageState extends State<DetailPage> {
                                       .priceEnd[index + 1],
                                   (index + 1).toString()),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

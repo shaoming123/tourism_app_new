@@ -149,17 +149,9 @@ class _HomeState extends State<Home> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
+                    const SizedBox(
                       height: 50.0,
                       width: 50.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      child: Icon(
-                        Icons.filter_list,
-                        color: Colors.white,
-                      ),
                     ),
                     Center(
                       child: Text(
