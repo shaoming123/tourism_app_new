@@ -74,19 +74,14 @@ class _OrderListState extends State<OrderList> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height - 100.0,
+                height: MediaQuery.of(context).size.height - 150.0,
                 width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 80.0),
-                  child: Center(
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: orderHistory.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          listItem(orderHistory[index]),
-                    ),
-                  ),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: orderHistory.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      listItem(orderHistory[index]),
                 ),
               ),
             ]),
